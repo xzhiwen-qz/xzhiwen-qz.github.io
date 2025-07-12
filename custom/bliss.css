@@ -17,3 +17,13 @@
     height: 150px;
     width: 100%;
 }
+
+.ads-wrap {
+    padding: 0 !important;
+    height: 162px;
+}
+
+.ads-wrap img {
+    width: 100%;
+    cursor: pointer;
+}
