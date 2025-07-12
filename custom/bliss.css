@@ -1,0 +1,19 @@
+#page-header.full_page {
+    background-attachment: unset;
+}
+
+:not(#post) > #post-comment, :not(#post) > .custom-hr, .shuoshuo-comment-btn {
+    display: none;
+}
+
+#footer .footer-other {
+    padding: 7px 0 73px 0;
+    font-size: 16px;
+}
+
+#jsi-flying-fish-container {
+    position: fixed;
+    bottom: -9px;
+    height: 150px;
+    width: 100%;
+}
