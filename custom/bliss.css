@@ -2,18 +2,33 @@
     background-attachment: unset;
 }
 
-:not(#post) > #post-comment, :not(#post) > .custom-hr, .shuoshuo-comment-btn {
-    display: none;
+#site-info {
+    font-family: cursive
 }
 
 #footer .footer-other {
-    padding: 13px 0 67px 0;
+    padding: 7px 0 73px 0;
     font-size: 16px;
 }
 
 #jsi-flying-fish-container {
-    position: absolute;
-    bottom: 0;
-    height: 108px;
+    position: fixed;
+    bottom: -9px;
+    height: 150px;
     width: 100%;
+    pointer-events: none;
+}
+
+#aside-content .ads-wrap {
+    padding: 0;
+    line-height: 0;
+}
+
+#aside-content .ads-wrap img {
+    width: 100%;
+    cursor: pointer;
+}
+
+#footer .footer_custom_text a:hover {
+    color: red;
 }

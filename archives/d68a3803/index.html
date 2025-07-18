@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Steam检测交易报价 | 俗人俗世</title><meta name="author" content="Xzhiwen"><meta name="copyright" content="Xzhiwen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="要使用Steam API检测交易报价（Trade Offer）的状态和内容，需通过Steam提供的接口结合API Key实现。以下是核心方法和注意事项：  🔍 一、API检测报价的基本原理 报价查询接口  Steam开放了&#x2F;IEconService&#x2F;GetTradeOffers&#x2F;v1等接口，允许通过APIKey查询交易报价的详细信息，包括报价状态（待接受&#x2F;已取消&#x2F;已接受）、交">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Steam检测交易报价">
+<meta property="og:url" content="https://xzhiwen-qz.github.io/archives/d68a3803/index.html">
+<meta property="og:site_name" content="俗人俗世">
+<meta property="og:description" content="要使用Steam API检测交易报价（Trade Offer）的状态和内容，需通过Steam提供的接口结合API Key实现。以下是核心方法和注意事项：  🔍 一、API检测报价的基本原理 报价查询接口  Steam开放了&#x2F;IEconService&#x2F;GetTradeOffers&#x2F;v1等接口，允许通过APIKey查询交易报价的详细信息，包括报价状态（待接受&#x2F;已取消&#x2F;已接受）、交">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://q1.itc.cn/images01/20250706/d73b32641734454384be418be4ce2b13.jpeg">
+<meta property="article:published_time" content="2025-07-13T04:15:48.000Z">
+<meta property="article:modified_time" content="2025-07-18T02:53:56.643Z">
+<meta property="article:author" content="Xzhiwen">
+<meta property="article:tag" content="Steam">
+<meta property="article:tag" content="API">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://q1.itc.cn/images01/20250706/d73b32641734454384be418be4ce2b13.jpeg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Steam检测交易报价",
+  "url": "https://xzhiwen-qz.github.io/archives/d68a3803/",
+  "image": "https://q1.itc.cn/images01/20250706/d73b32641734454384be418be4ce2b13.jpeg",
+  "datePublished": "2025-07-13T04:15:48.000Z",
+  "dateModified": "2025-07-18T02:53:56.643Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Xzhiwen",
+      "url": "https://xzhiwen-qz.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.ico"><link rel="canonical" href="https://xzhiwen-qz.github.io/archives/d68a3803/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Steam检测交易报价',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/custom/bliss.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa-solid fa-fire-flame-curved"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa-solid fa-signs-post"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa-solid fa-feather"></i><span> 说说</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw fa-solid fa-pen-to-square"></i><span> 留言</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa-fw fas fa-images"></i><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://q1.itc.cn/images01/20250706/d73b32641734454384be418be4ce2b13.jpeg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">俗人俗世</span></a><a class="nav-page-title" href="/"><span class="site-name">Steam检测交易报价</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa-solid fa-fire-flame-curved"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa-solid fa-signs-post"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fa-solid fa-feather"></i><span> 说说</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw fa-solid fa-pen-to-square"></i><span> 留言</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa-fw fas fa-images"></i><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Steam检测交易报价</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-13T04:15:48.000Z" title="发表于 2025-07-13 12:15:48">2025-07-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-18T02:53:56.643Z" title="更新于 2025-07-18 10:53:56">2025-07-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">619</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>要使用Steam API检测交易报价（Trade Offer）的状态和内容，需通过Steam提供的接口结合API Key实现。以下是核心方法和注意事项：</p>
+<hr>
+<h3 id="🔍-一、API检测报价的基本原理"><a href="#🔍-一、API检测报价的基本原理" class="headerlink" title="🔍 一、API检测报价的基本原理"></a>🔍 一、API检测报价的基本原理</h3><ol>
+<li><p><strong>报价查询接口</strong></p>
+<ul>
+<li>Steam开放了<code>/IEconService/GetTradeOffers/v1</code>等接口，允许通过API<br>Key查询交易报价的详细信息，包括报价状态（待接受&#x2F;已取消&#x2F;已接受）、交易物品、参与者SteamID等。</li>
+<li>示例请求：<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET https://api.steampowered.com/IEconService/GetTradeOffers/v1/?key=YOUR_API_KEY&amp;get_sent_offers=1&amp;get_received_offers=1</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>单笔报价验证接口</strong></p>
+<ul>
+<li>第三方平台（如C5GAME）提供专用接口验证报价是否归属该平台。例如：<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POST /merchant/offer/v1/exists</span><br><span class="line">参数：tradeofferid=报价ID&amp;app-key=平台密钥</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="⚙️-二、实现步骤"><a href="#⚙️-二、实现步骤" class="headerlink" title="⚙️ 二、实现步骤"></a>⚙️ 二、实现步骤</h3><ol>
+<li><p><strong>获取Steam API Key</strong></p>
+<ul>
+<li>在<a target="_blank" rel="noopener" href="https://steamcommunity.com/dev/apikey">Steam开发者后台</a>申请API Key，需绑定已验证域名的网站（如<code>localhost</code>可用于测试）。</li>
+</ul>
+</li>
+<li><p><strong>调用报价检测接口</strong></p>
+<ul>
+<li>使用官方接口查询报价状态：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Node.js示例（使用axios）</span></span><br><span class="line"><span class="keyword">const</span> axios = <span class="built_in">require</span>(<span class="string">&#x27;axios&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="string">`https://api.steampowered.com/IEconService/GetTradeOffers/v1/?key=<span class="subst">$&#123;API_KEY&#125;</span>&amp;tradeofferid=<span class="subst">$&#123;OFFER_ID&#125;</span>`</span>;</span><br><span class="line">axios.<span class="title function_">get</span>(url).<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(response.<span class="property">data</span>); <span class="comment">// 包含报价详情和状态</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>处理报价状态</strong></p>
+<ul>
+<li>关键字段解析：<ul>
+<li><code>trade_offer_state</code>：<ul>
+<li><code>2</code> &#x3D; 已接受</li>
+<li><code>3</code> &#x3D; 已取消</li>
+<li><code>6</code> &#x3D; 待确认（需手机令牌验证）</li>
+</ul>
+</li>
+<li><code>items_to_give</code>：对方提供的物品</li>
+<li><code>items_to_receive</code>：你提供的物品</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="⚠️-三、安全与风险防控"><a href="#⚠️-三、安全与风险防控" class="headerlink" title="⚠️ 三、安全与风险防控"></a>⚠️ 三、安全与风险防控</h3><ol>
+<li><p><strong>API劫持防护</strong></p>
+<ul>
+<li><strong>风险</strong>：若API Key泄露，攻击者可窃取交易信息或取消报价（如伪造交易方并替换为假报价）。</li>
+<li><strong>措施</strong>：<ul>
+<li>定期重置API Key（<a target="_blank" rel="noopener" href="https://steamcommunity.com/dev/apikey">管理页面</a>）。</li>
+<li>绝不登录可疑网站或授权未知第三方应用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>绑定手机令牌</strong></p>
+<ul>
+<li>未绑定令牌的账户发起的报价可能被暂挂15天，且API无法绕过确认流程。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="🔄-四、替代方案：第三方API服务"><a href="#🔄-四、替代方案：第三方API服务" class="headerlink" title="🔄 四、替代方案：第三方API服务"></a>🔄 四、替代方案：第三方API服务</h3><p>若需批量检测报价或获取实时价格，可考虑：</p>
+<ol>
+<li><strong>SteamApis&#x2F;Steamlytics</strong>：提供缓存的市场数据接口，避免频繁请求被Steam限流。</li>
+<li><strong>CSGO Trader Prices</strong>：一次性获取所有CS:GO物品价格（每8小时更新），适合库存估值。</li>
+</ol>
+<hr>
+<h3 id="💎-五、总结建议"><a href="#💎-五、总结建议" class="headerlink" title="💎 五、总结建议"></a>💎 五、总结建议</h3><ul>
+<li><strong>基础流程</strong>：申请API Key → 调用<code>GetTradeOffers</code>接口 → 解析<code>trade_offer_state</code>状态。</li>
+<li><strong>安全必做</strong>：绑定手机令牌 + 定期重置API Key + 仅信任正规平台。</li>
+<li><strong>高效方案</strong>：对大规模应用（如交易平台），优先使用第三方聚合API降低请求频率。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://xzhiwen-qz.github.io">Xzhiwen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://xzhiwen-qz.github.io/archives/d68a3803/">https://xzhiwen-qz.github.io/archives/d68a3803/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://xzhiwen-qz.github.io" target="_blank">俗人俗世</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Steam/">Steam</a><a class="post-meta__tags" href="/tags/API/">API</a></div><div class="post-share"><div class="social-share" data-image="https://q1.itc.cn/images01/20250706/d73b32641734454384be418be4ce2b13.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/archives/ae6ca5eb/" title="SSH协议克隆Github仓库"><img class="cover" src="https://pic.rmb.bdstatic.com/bjh/down/ddbd0c2152b26b635f185c26a75e6f1b.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SSH协议克隆Github仓库</div></div><div class="info-2"><div class="info-item-1">要通过 SSH 协议克隆 GitHub 仓库，你需要先设置好 SSH 密钥并添加到 GitHub 账户，以下是完整的操作步骤：   1、生成新的 SSH 密钥1ssh-keygen -t rsa -C &quot;你的邮箱&quot;  回车三次后，生成 id_rsa（私钥） 和 id_rsa.pub（公钥） 两个文件。 2、将 SSH 公钥添加到 GitHub 登录 GitHub，进入 Settings → SSH and GPG keys 点击 New SSH key，粘贴公钥内容，设置标题后保存。  3、测试 SSH 链接1ssh -T git@github.com  You’ve successfully authenticated, but GitHub does not provide shell access. </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/archives/63555b67/" title="Steam令牌码生成"><img class="cover" src="https://gips3.baidu.com/it/u=3869374479,1644302172&fm=3074&app=3074&f=JPEG" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-12</div><div class="info-item-2">Steam令牌码生成</div></div><div class="info-2"><div class="info-item-1">首先获取时间戳除以30取整，得到8个数，再补成8字节长度。然后读取maFile文件中存储的shared_secret密钥，以该密钥为key，将上述处理后的8字节时间戳作为加密信息进行哈希运算，得到一串16进制的数。最后从这串16进制字符串中取最后一位去掉高四做为偏移，在这串数中取四个字节，除26取余数5次得到5个数。从字母表中找到对应的值合起来就是我们要的令牌验证码。   12345678910111213141516171819202122232425import hashlibimport hmacimport structfrom base64 import b64decodefrom time import timedef get_steam_auth_code(secret: str, t: int = None) -&gt; str:    if not t:        t = int(time() / 30)    msg = struct.pack(&quot;&gt;Q&quot;, t)    key = b64decode(secret)    mac ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Xzhiwen</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xzhiwen-qz"><i class="fab fa-github"></i><span>关注我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">写代码，聊技术，偶尔碎碎念。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%8D-%E4%B8%80%E3%80%81API%E6%A3%80%E6%B5%8B%E6%8A%A5%E4%BB%B7%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">🔍 一、API检测报价的基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E4%BA%8C%E3%80%81%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-text">⚙️ 二、实现步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E4%B8%89%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E9%A3%8E%E9%99%A9%E9%98%B2%E6%8E%A7"><span class="toc-text">⚠️ 三、安全与风险防控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%84-%E5%9B%9B%E3%80%81%E6%9B%BF%E4%BB%A3%E6%96%B9%E6%A1%88%EF%BC%9A%E7%AC%AC%E4%B8%89%E6%96%B9API%E6%9C%8D%E5%8A%A1"><span class="toc-text">🔄 四、替代方案：第三方API服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%92%8E-%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93%E5%BB%BA%E8%AE%AE"><span class="toc-text">💎 五、总结建议</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/archives/d68a3803/" title="Steam检测交易报价"><img src="https://q1.itc.cn/images01/20250706/d73b32641734454384be418be4ce2b13.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Steam检测交易报价"/></a><div class="content"><a class="title" href="/archives/d68a3803/" title="Steam检测交易报价">Steam检测交易报价</a><time datetime="2025-07-13T04:15:48.000Z" title="发表于 2025-07-13 12:15:48">2025-07-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/archives/ae6ca5eb/" title="SSH协议克隆Github仓库"><img src="https://pic.rmb.bdstatic.com/bjh/down/ddbd0c2152b26b635f185c26a75e6f1b.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSH协议克隆Github仓库"/></a><div class="content"><a class="title" href="/archives/ae6ca5eb/" title="SSH协议克隆Github仓库">SSH协议克隆Github仓库</a><time datetime="2025-07-12T15:31:28.000Z" title="发表于 2025-07-12 23:31:28">2025-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/archives/63555b67/" title="Steam令牌码生成"><img src="https://gips3.baidu.com/it/u=3869374479,1644302172&amp;fm=3074&amp;app=3074&amp;f=JPEG" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Steam令牌码生成"/></a><div class="content"><a class="title" href="/archives/63555b67/" title="Steam令牌码生成">Steam令牌码生成</a><time datetime="2025-07-12T06:48:06.000Z" title="发表于 2025-07-12 14:48:06">2025-07-12</time></div></div></div></div><div class="card-widget ads-wrap"><a target="_blank" rel="noopener" href="https://curl.qcloud.com/gWJipElR"><img src="https://dscache.tencent-cloud.cn/upload/nodir/rhino-design-1280x720-e6e0f788c0dbcd803081e6153f331cc5a08c4f4b.png" title="【腾讯云】AI 驱动 · 智领未来，4核4G3M云服务器低至 79元/年"></img></a></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2025 By Xzhiwen</span></div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index"><img class="icp-icon" src="/img/icp.webp"><span>闽ICP备2024069026号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const destroyWaline = ele => ele.destroy()
+
+  const initWaline = (Fn, el = document, path = window.location.pathname) => {
+    const waline = Fn({
+      el: el.querySelector('#waline-wrap'),
+      serverURL: 'https://eb0iojti.api.lncldglobal.com',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      comment: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyWaline = () => {
+        destroyWaline(waline)
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const loadWaline = (el, path) => {
+    if (initFn) initWaline(initFn, el, path)
+    else {
+      btf.getCSS('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css')
+        .then(() => import('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js'))
+        .then(({ init }) => {
+          initFn = init || Waline.init
+          initWaline(initFn, el, path)
+          window.walineFn = initFn
+        })
+    }
+  }
+
+  if (isShuoshuo) {
+    'Waline' === 'Waline'
+      ? window.shuoshuoComment = { loadComment: loadWaline } 
+      : window.loadOtherComment = loadWaline
+    return
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><div id='jsi-flying-fish-container'></div><div class="aplayer no-destroy" data-id="2098892084" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"></div><script src="/custom/jquery-3.3.1.min.js"></script><script src="/custom/bliss.js"></script><script src="/custom/fish.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => fn())
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
