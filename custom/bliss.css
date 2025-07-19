@@ -29,6 +29,24 @@
     cursor: pointer;
 }
 
+#footer .footer_custom_text a {
+    position: relative;
+}
+
+#footer .footer_custom_text img {
+    padding-top: 2px;
+}
+
 #footer .footer_custom_text a:hover {
-    color: red;
+    color: #eee;
+}
+
+#footer .footer_custom_text a:hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
 }
