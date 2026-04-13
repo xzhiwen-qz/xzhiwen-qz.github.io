@@ -1,0 +1,52 @@
+#page-header.full_page {
+    background-attachment: unset;
+}
+
+#site-info {
+    font-family: cursive
+}
+
+#footer .footer-other {
+    padding: 7px 0 73px 0;
+    font-size: 16px;
+}
+
+#jsi-flying-fish-container {
+    position: fixed;
+    bottom: -9px;
+    height: 150px;
+    width: 100%;
+    pointer-events: none;
+}
+
+#aside-content .ads-wrap {
+    padding: 0;
+    line-height: 0;
+}
+
+#aside-content .ads-wrap img {
+    width: 100%;
+    cursor: pointer;
+}
+
+#footer .footer_custom_text a {
+    position: relative;
+}
+
+#footer .footer_custom_text img {
+    padding-top: 2px;
+}
+
+#footer .footer_custom_text a:hover {
+    color: #eee;
+}
+
+#footer .footer_custom_text a:hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+}
